@@ -29,5 +29,6 @@ class Task21:
         h = ui.get_num("Высота: ")
         print("Площадь треугольника: ", self.triangle_area(b, h))
 
-Task21.print_answer()
-Task16.print_answer()
+if __name__ == "__main__":
+    Task21.print_answer()
+    Task16.print_answer()

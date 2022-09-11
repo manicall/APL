@@ -27,6 +27,7 @@ class Task19:
         # целая часть в заданном числе
         int_part = int(num_mark)
         # дробная часть в заданном числе
+        
         decimal_part = num_mark - int_part
         # округление дробной части
         rounded = self.get_rounded(decimal_part)
@@ -82,8 +83,9 @@ class Task20:
         elif rate >= 0.6:
             return ("Высокий уровень", salary * rate)
 
-print("Результат задачи 19")
-Task19.print_answer()
-
-print("\nРезультат задачи 20")
-Task20.print_answer()
+if __name__ == "__main__":
+    print("Результат задачи 19")
+    Task19.print_answer()
+    print()
+    print("\nРезультат задачи 20")
+    Task20.print_answer()

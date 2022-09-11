@@ -38,3 +38,12 @@ class UserInput:
                 print("Ожидалось двоичное число!")
             else:
                 return match.group()
+
+    @staticmethod
+    def get_hex_safe(title = "Введите шестнадцатиричное число: "):
+        while True:
+            match = re.match("^[0-9a-fA-F]+$", input(title)) 
+            if match == None:
+                print("Ожидалось шестнадцатиричное число!")
+            else:
+                return match.group().upper()

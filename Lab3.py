@@ -17,7 +17,6 @@ class Task19:
             j -= 1
 
         return sum
-        
 
 class Task20:
     @classmethod
@@ -36,9 +35,10 @@ class Task20:
             q //= 2
 
         return result
-
-print("Задание 19")
-Task19.print_answer()
-print()
-print("Задание 20")
-Task20.print_answer()
+    
+if __name__ == "__main__":
+    print("Задание 19")
+    Task19.print_answer()
+    print()
+    print("Задание 20")
+    Task20.print_answer()
