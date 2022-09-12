@@ -1,7 +1,6 @@
 from os import pardir
 import tkinter as tk
 import random as rand
-
 class App(tk.Tk):
     def __init__(self):
         super().__init__()  
@@ -12,21 +11,40 @@ class App(tk.Tk):
         
         self.__create_menu()
         self.__create_listboxes()
-        self.expression = tk.StringVar()
+        self.__input_expression = tk.StringVar()
+        self.__output_expression = tk.StringVar()
         
         lframe = tk.LabelFrame(self, text="задание 21")
         lframe.pack(padx=5, pady=5, anchor=tk.NW)
         
-        tk.Label(lframe, text="Выражение ").pack(side=tk.LEFT,  anchor=tk.NW)
-        tk.Entry(lframe, textvariable=self.expression).pack(side=tk.LEFT, anchor=tk.NW)
+        input_frame = tk.Frame(lframe)
+        output_frame = tk.Frame(lframe)
         
-        self.__listbox_expression = self.__create_listbox(lframe)
-       
-          
+        input_frame.pack()
+        output_frame.pack(side=tk.LEFT)
+
+        tk.Label(input_frame, text="Выражение").pack(side=tk.LEFT)
+        tk.Entry(input_frame, textvariable=self.__input_expression).pack(padx=5)
+        
+        tk.Label(output_frame, textvariable=self.__output_expression).pack(padx=5)
+  
     def __create_menu(self):
         main_menu = tk.Menu()
-        main_menu.add_cascade(label="Создать колоду", command=self.__create_deck)
-        main_menu.add_cascade(label="Перетасовать колоду", command=self.__shuffle)
+        
+        lables = [
+            "Создать колоду", 
+            "Перетасовать колоду", 
+            "Заменить унарный оператор"
+        ]
+        
+        commands = [
+            self.__create_deck,
+            self.__shuffle, 
+            self.__replace_uoperations
+        ]
+        
+        for l, c in zip(lables, commands):
+            main_menu.add_cascade(label=l, command=c)
 
         self.config(menu=main_menu)
         
@@ -77,6 +95,53 @@ class App(tk.Tk):
         lbox.delete(0, tk.END)  
         for card in filler: 
             lbox.insert(tk.END,card)
+            
+    def __replace_uoperations(self):
+        tokens = self.__tocken_extractor(self.__input_expression.get())
+        
+        prev_tokens = ['+', '-', '*', '/', '^', '(']
+        u_operations = prev_tokens[0:2]
+
+        if self.__check_symbol(tokens[0], u_operations):
+            tokens[0] = 'u' + tokens[0]
+        
+        for i in range(1, len(tokens)):            
+            if self.__check_symbol(tokens[i], u_operations) \
+                and self.__check_symbol(tokens[i - 1], prev_tokens):
+                    tokens[i] = 'u' + tokens[i]
+
+        self.__output_expression.set(" ".join(tokens))
+        
+    def __tocken_extractor(self, _str):
+        simple_tokens = ['+', '-', '*', '/', '^', '(', ')']
+        res_list = []
+        j = None
+        
+        def append_number():
+            nonlocal j, res_list, _str
+            
+            if j != None:
+                    res_list.append(_str[j:i[0]])
+                    j = None
+        
+        for i in enumerate(_str):
+            if self.__check_symbol(i[1], simple_tokens):
+                append_number()
+                res_list.append(i[1])
+            elif i[1].isdigit() or i[1] == '.':
+                if j == None: j = i[0]
+            else:
+                append_number()
+        
+        append_number() 
+            
+        return res_list    
+
+    @staticmethod
+    def __check_symbol(_char, _list):
+        return any(list(map(lambda x: _char == x, _list)))
+
+        
            
 if __name__ == "__main__":
     app = App()
