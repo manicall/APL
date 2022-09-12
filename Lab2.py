@@ -18,9 +18,12 @@ class Task19:
             rand = r.uniform(-1, 6)
             print(f"Число: {rand} Оценка: {self.get_char_mark(self, rand)}")
 
+    @classmethod
     def get_char_mark(self, num_mark):
         if num_mark > 4.0:
             return "A+"
+        if num_mark >= 0 and num_mark <= 1: 
+            return "F"
         if (num_mark < 0): 
             print("Необходимо ввести число больше нуля!")
 
