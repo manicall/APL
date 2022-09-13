@@ -1,4 +1,3 @@
-from os import pardir
 import tkinter as tk
 import random as rand
 class App(tk.Tk):
@@ -141,8 +140,6 @@ class App(tk.Tk):
     def __check_symbol(_char, _list):
         return any(list(map(lambda x: _char == x, _list)))
 
-        
-           
 if __name__ == "__main__":
     app = App()
     app.mainloop()

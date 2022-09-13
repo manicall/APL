@@ -2,7 +2,6 @@ from wsgiref import handlers
 from random_password import RandomPassword as rp
 from user_input import UserInput as ui
 from string import ascii_uppercase
-
 class Task19:
     def print_answer():
         count = 0
@@ -14,7 +13,6 @@ class Task19:
             password = rp.get_random_password()
 
         print(f"Пароль: {password}]\nПопытки: {count}")
-
 class Task20:
     @classmethod
     def print_answer(self):
