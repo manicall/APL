@@ -1,9 +1,8 @@
-from ast import Delete
 import tkinter as tk
 import tkcalendar as tkc
 import os.path, time, locale
 
-from calendar import calendar, monthrange
+from calendar import monthrange
 from datetime import datetime, date, timedelta
 from threading import Thread
 from tkinter import messagebox as mbox

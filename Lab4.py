@@ -2,6 +2,7 @@ from wsgiref import handlers
 from random_password import RandomPassword as rp
 from user_input import UserInput as ui
 from string import ascii_uppercase
+
 class Task19:
     def print_answer():
         count = 0
