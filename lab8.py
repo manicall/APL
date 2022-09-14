@@ -47,11 +47,11 @@ class App(tk.Tk):
         if len(str1) != len(str2): return False
         
         # преобразование строк словарь
-        _dict = dict(zip(list(str1), list(str2)))
+        dictionary = dict(zip(list(str1), list(str2)))
         
         # проверка, что второй список содержит все символы первого списка
-        for i in _dict:
-            if not App.is_contain(i, list(_dict.values())):
+        for key in dictionary:
+            if not App.is_contain(key, list(dictionary.values())):
                 return False
             
         return True

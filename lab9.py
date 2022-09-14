@@ -65,14 +65,14 @@ class App(tk.Tk):
         mbox.showinfo("День года", self.date_in_day(_date))
     
     @staticmethod
-    def __get_date(_str):
-        split = _str.split(".")
+    def __get_date(str_date):
+        split = str_date.split(".")
         return date(int(split[2]), int(split[1]), int(split[0]))
     
     @staticmethod
-    def date_in_day(_date):
-        print(f"\n\n{_date}\n\n")
-        return (_date - date(_date.year, 1, 1)).days + 1  
+    def date_in_day(u_date):
+        print(f"\n\n{u_date}\n\n")
+        return (u_date - date(u_date.year, 1, 1)).days + 1  
             
     def __task19(self):
         _date = App.__get_date(self.calendar.get_date())
@@ -80,13 +80,13 @@ class App(tk.Tk):
         pass 
     
     @staticmethod
-    def last_tuesday(_date):
-        _date = date(_date.year, _date.month, monthrange(_date.year, _date.month)[1])
+    def last_tuesday(u_date):
+        u_date = date(u_date.year, u_date.month, monthrange(u_date.year, u_date.month)[1])
         
-        while _date.weekday() != 1:
-            _date = _date - timedelta(days=1)
+        while u_date.weekday() != 1:
+            u_date = u_date - timedelta(days=1)
         
-        return _date
+        return u_date
     
     def __task25(self):
         if not self.thread.is_alive(): 
