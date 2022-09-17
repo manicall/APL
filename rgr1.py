@@ -73,15 +73,16 @@ class Field(QtWidgets.QLabel):
         self.x = x
         self.y = y
         
+        # вызов paintEvent
         self.update()
 
     def paintEvent(self, event):
         qp = QtGui.QPainter()
         qp.begin(self)
-        self.drawPixmap(qp, self.x, self.y)
+        self.draw_pixmap(qp, self.x, self.y)
         qp.end()
         
-    def drawPixmap(self, qp, x, y):   
+    def draw_pixmap(self, qp, x, y):   
         transform = QtGui.QTransform()
         transform.rotate(self.get_degree())
         

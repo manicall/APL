@@ -9,4 +9,3 @@ v3 = np.array([10., 3., 3.])
 x = np.linalg.solve(M3, v3)
 print(x)
 print(np.dot(M3, x))
-
