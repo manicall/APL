@@ -5,6 +5,7 @@ from scipy.optimize import linprog
 class Solver:
     @classmethod
     def scipy_solve(self):
+        '''решает задачу оптимизации'''
         model = self.model
         
         try:
@@ -105,9 +106,10 @@ class Model(QtGui.QStandardItemModel):
         
         self.fill_c()
         self.fill_ub()
-        self.fill_eq()
+        self.fill_b_eq()
         
     def fill_c(self):
+        '''заполняет таблицу значениями коэффициентов целевой функции'''
         j = 0
         for i in range(len(self.b_ub)):
             for k in range(len(self.b_eq)):
@@ -115,16 +117,19 @@ class Model(QtGui.QStandardItemModel):
                 j += 1
                 
     def fill_ub(self):
+        '''заполняет таблицу значениями вектора ограничения неравенства'''
         for i in enumerate(self.b_ub):
             item = QtGui.QStandardItem(str(i[1]))
             self.setItem(i[0], self.columnCount() - 1, item)
                     
-    def fill_eq(self):
+    def fill_b_eq(self):
+        '''заполняет таблицу значениями вектора ограничения равенства'''
         for i in enumerate(self.b_eq):
             item = QtGui.QStandardItem(str(i[1]))
             self.setItem(self.rowCount() - 1, i[0], item)
             
     def get_c(self):
+        '''возвращает список со значениями коэффициентов целевой функции'''
         c = []
         for i in range(len(self.b_ub)):
             for k in range(len(self.b_eq)):
@@ -133,12 +138,14 @@ class Model(QtGui.QStandardItemModel):
         return c
 
     def get_b_ub(self):
+        '''возвращает список со значениями вектора ограничения неравенства'''
         b_ub = []
         for i in enumerate(self.b_ub):
             b_ub.append(int(self.item(i[0], self.columnCount() - 1).text()))
         return b_ub
     
     def get_b_eq(self):
+        '''возвращает список со значениями вектора ограничения равенства'''
         b_eq = []
         for i in enumerate(self.b_eq):
             b_eq.append(int(self.item(self.rowCount() - 1, i[0]).text()))
