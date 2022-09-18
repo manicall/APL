@@ -1,13 +1,14 @@
 import re
 
 class UserInput:
-    # возврат целого числа
     @staticmethod
     def get_int(title = "Введите целое число: "):
+        '''получение от пользователя целого числа без проверки'''
         return int(input(title))
 
     @staticmethod
     def get_int_safe(title = "Введите целое число: "):
+        '''получение от пользователя целого числа с проверкой'''
         res = None
         
         while res == None:
@@ -20,6 +21,7 @@ class UserInput:
 
     @staticmethod
     def get_float_safe(title = "Введите число: "):
+        '''получение от пользователя вещественного числа с проверкой'''
         res = None
         
         while res == None:
@@ -32,6 +34,7 @@ class UserInput:
 
     @staticmethod
     def get_bin_safe(title = "Введите двоичное число: "):
+        '''получение от пользователя двоичного числа с проверкой'''
         while True:
             match = re.match("^[01]+$", input(title)) 
             if match == None:
@@ -41,6 +44,7 @@ class UserInput:
 
     @staticmethod
     def get_hex_safe(title = "Введите шестнадцатиричное число: "):
+        '''получение от пользователя шестнадцатиричного числа с проверкой'''
         while True:
             match = re.match("^[0-9a-fA-F]+$", input(title)) 
             if match == None:

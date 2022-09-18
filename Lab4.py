@@ -5,15 +5,16 @@ from string import ascii_uppercase
 
 class Task19:
     def print_answer():
-        count = 0
+        count = 1 # количество попыток
         password = rp.get_random_password()
 
         while not rp.is_strong(password):
-            # ? print(password)
-            count += 1
+            # ? print(password) - вывод паролей при попытке подбора
             password = rp.get_random_password()
+            count += 1
 
         print(f"Пароль: {password}]\nПопытки: {count}")
+        
 class Task20:
     @classmethod
     def print_answer(self):
@@ -27,12 +28,11 @@ class Task20:
         
     @classmethod
     def hex2int(self, hex):
+        '''переводит шестнадцатиричное число в двоичное'''      
         sum = 0
         dec_list = self.get_dec_list(hex)
         
         j = len(dec_list) - 1
-        
-        print(dec_list)
         
         for i in dec_list:
             sum += i * 16 ** j
@@ -41,6 +41,8 @@ class Task20:
         return sum
         
     def get_dec_list(hex):
+        '''возвращает список чисел в шестнадцатиричной системе
+        с заменой букв на соответствующие им числа'''
         dec_list = []
         
         for i in hex:
@@ -52,6 +54,7 @@ class Task20:
         return dec_list
     
     def int2hex(q):
+        '''переводит десятичное число в шестнадцатиричное'''
         result = ""
 
         while q > 0:

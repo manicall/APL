@@ -144,7 +144,6 @@ class Model(QtGui.QStandardItemModel):
         for i in enumerate(self.b_eq):
             b_eq.append(int(self.item(self.rowCount() - 1, i[0]).text()))
         return b_eq
-        
     
 if __name__ == "__main__":
     app = App()

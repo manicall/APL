@@ -13,13 +13,15 @@ class Task19:
 
     @classmethod
     def print_answer(self):
-         # для тестирования программы используется диапазон случайных чисел
+        # для тестирования программы используется диапазон случайных чисел
         for i in range(10):
             rand = r.uniform(-1, 6)
             print(f"Число: {rand} Оценка: {self.get_char_mark(self, rand)}")
 
+   
     @classmethod
     def get_char_mark(self, num_mark):
+        '''возвращает буквенную оценку по числовой оценке'''
         if num_mark > 4.0:
             return "A+"
         if num_mark >= 0 and num_mark <= 1: 
@@ -30,7 +32,6 @@ class Task19:
         # целая часть в заданном числе
         int_part = int(num_mark)
         # дробная часть в заданном числе
-        
         decimal_part = num_mark - int_part
         # округление дробной части
         rounded = self.get_rounded(decimal_part)
@@ -45,12 +46,14 @@ class Task19:
         else:
             return self.marks[int_part] + sign
 
-    def get_rounded(decimal_part):    
+    def get_rounded(decimal_part):          
         l = [0, 0.3, 0.7, 1]
         # возврат числа, к которому наиболее близок заданный параметр
         return min(l, key=lambda x:abs(x-decimal_part))
 
     def get_sign(rounded):
+        '''возвращает знак буквенной оценки по числовой оценке\n
+           rounded - округленное число до ближайшего в таблице'''     
         if rounded > 0.5 and rounded < 1: 
             return "-"
         elif (rounded < 0.5 and rounded > 0):
@@ -61,23 +64,29 @@ class Task19:
 class Task20:
     @classmethod
     def print_answer(self):
-        rate = None
-        while True:
-            rate = ui.get_float_safe("Введите число: ")
-            if (rate != None):
-                if (rate == 0 or rate == 0.4 or rate >= 0.6):
-                    break
-                else: 
-                    print(
-                        'В качестве рейтинга', 
-                        'используются значения "0", "0.4", "0.6 и выше"')
+        rate = self.get_rate()
 
         # Вывод результата
         value, increase = self.get_result(rate)
         print(f"Значение: {value}")
         print(f"Сумма прибавки сотрудника: {increase}")
 
+    def get_rate():
+        '''пытается получить рейтинг от пользователя,
+        пока не будет введено корректное значение, возвращает это значение'''
+        rate = None
+        while True:
+            rate = ui.get_float_safe("Введите число: ")
+            if (rate != None):
+                if (rate == 0 or rate == 0.4 or rate >= 0.6):
+                    return rate
+                else:
+                    print(
+                        '''В качестве рейтинга
+                        используются значения "0", "0.4", "0.6 и выше"''')
+
     def get_result(rate):
+        '''возвращает значение из таблицы и расчитанную прибавку к зарплате'''
         salary = 2400
         if rate == 0:
             return ("Низкий уровень", salary * rate)

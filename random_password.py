@@ -3,6 +3,7 @@ import random as r
 class RandomPassword:
     @staticmethod
     def get_random_password():
+        '''генерация случайного пароля'''
         size = r.randint(7, 10)
         password = ""
         for i in range(size):
@@ -12,6 +13,7 @@ class RandomPassword:
     
     @staticmethod
     def is_strong(password):
+        '''проверка пароля на надежность'''
         if len(password) < 8:
             return False
 

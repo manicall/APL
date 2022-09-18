@@ -14,7 +14,7 @@ class App(tk.Tk):
         self.geometry(f"{self.width}x{self.height}")
         self.count = None
         
-        self.__create_menu()
+        self.create_menu()
         
         f = tk.Frame(self)
         f.pack(fill="both", expand=True)
@@ -22,7 +22,7 @@ class App(tk.Tk):
         self.canvas = tk.Canvas(f)
         self.canvas.pack(fill="both", expand=True)
        
-    def __create_menu(self):
+    def create_menu(self):
         main_menu = tk.Menu()
         
         lables = [
@@ -39,6 +39,7 @@ class App(tk.Tk):
         self.config(menu=main_menu)
     
     def create_rounds(self):
+        '''функция создающая круги, заданного количества'''
         self.create_window()
         try:
             count = int(self.count)
@@ -48,6 +49,7 @@ class App(tk.Tk):
             return # выход из функции
         
         self.canvas.delete("all")   
+        # список содержащий цвета от синего до желтого
         colors = list(Color("blue").range_to(Color("yellow"), count))
         
         # извлечение ширины и высоты окна
@@ -72,6 +74,7 @@ class App(tk.Tk):
                                     outline="#000", fill=colors[i - 1], width=1)
         
     def create_window(self):
+        '''создание диалогового окна для ввода'''
         window = tk.Tk()
         window.title="Ввод числа"
         window.geometry("200x100")
@@ -87,7 +90,7 @@ class App(tk.Tk):
         def callback():
             nonlocal window, e, self
             
-            # значение извлекаемое из поля для ввода
+            # ! значение извлекаемое из поля для ввода
             self.count = e.get()
             window.destroy()
 

@@ -14,13 +14,14 @@ class App(tk.Tk):
         self.title("Лабораторная работа 9")
         self.geometry("800x600")   
         
-        self.__create_menu()
+        self.create_menu()
         
         frame = tk.Frame(self)
         frame.pack(side=tk.LEFT, anchor=tk.NW)
         
         now = datetime.now()
         
+        # календарь для вывода даты
         self.calendar = tkc.Calendar(
             frame, 
             selectmode="day", 
@@ -30,13 +31,15 @@ class App(tk.Tk):
         
         self.calendar.pack(side=tk.LEFT)
         
+        # поток, который выводит 5 строк в listbox
         self.thread_resume = False
         self.thread = Thread(target=self.interval_print, daemon=True)
         
+        # для вывода 5 строк
         self.listbox = tk.Listbox(frame)
         self.listbox.pack(side=tk.LEFT, fill=tk.Y, padx=10)
                  
-    def __create_menu(self):
+    def create_menu(self):
         lables = [
             "Преобразовать дату в день года",
             "Узнать дату последнего вторника",
@@ -45,10 +48,10 @@ class App(tk.Tk):
         ]
         
         commands = [
-            self.__task11,
-            self.__task19,
-            self.__task25,
-            self.__task38,
+            self.task11,
+            self.task19,
+            self.task25,
+            self.task38,
         ]
         
         menubar = tk.Menu(self)
@@ -60,27 +63,32 @@ class App(tk.Tk):
           
         menubar.add_cascade(label="Меню", menu=main_menu)
   
-    def __task11(self):
-        _date = App.__get_date(self.calendar.get_date())
-        mbox.showinfo("День года", self.date_in_day(_date))
+    def task11(self):
+        '''выводит результат функции date_in_day в диалоговое окно'''
+        u_date = App.get_date(self.calendar.get_date())
+        mbox.showinfo("День года", self.date_in_day(u_date))
     
     @staticmethod
-    def __get_date(str_date):
+    def get_date(str_date):
+        '''возвращает date на основе даты представленной строкой'''
         split = str_date.split(".")
         return date(int(split[2]), int(split[1]), int(split[0]))
     
     @staticmethod
     def date_in_day(u_date):
+        '''преобразует дату в день года'''
         print(f"\n\n{u_date}\n\n")
         return (u_date - date(u_date.year, 1, 1)).days + 1  
             
-    def __task19(self):
-        _date = App.__get_date(self.calendar.get_date())
-        mbox.showinfo("Дата последнего вторника", self.last_tuesday(_date))
+    def task19(self):
+        '''выводит результат функции last_tuesday в диалоговое окно'''
+        u_date = App.get_date(self.calendar.get_date())
+        mbox.showinfo("Дата последнего вторника", self.last_tuesday(u_date))
         pass 
     
     @staticmethod
     def last_tuesday(u_date):
+        '''рассчитывает дату последнего вторника в заданном месяце'''
         u_date = date(u_date.year, u_date.month, monthrange(u_date.year, u_date.month)[1])
         
         while u_date.weekday() != 1:
@@ -88,7 +96,8 @@ class App(tk.Tk):
         
         return u_date
     
-    def __task25(self):
+    def task25(self):
+        '''запускает поток, который выводит 5 строк в listbox'''
         if not self.thread.is_alive(): 
             self.thread.start()
             self.thread_resume = True
@@ -96,34 +105,40 @@ class App(tk.Tk):
             self.thread_resume = True  
     
     def interval_print(self):
+        '''вывод 5 строк с интервалов 3 секунды'''
         while True:
             if self.thread_resume == True:
                 self.listbox.delete(0, tk.END)
 
-                self.listbox.insert(tk.END, [self.calendar.get_date()])
+                self.listbox.insert(tk.END, self.calendar.get_date())
                 for i in range(4):
-                    App.__stay_interval()
-                    self.listbox.insert(tk.END, [self.calendar.get_date()])
+                    App.stay_interval()
+                    self.listbox.insert(tk.END, self.calendar.get_date())
                 
                 self.thread_resume = False
                   
     @staticmethod
-    def __stay_interval():
+    def stay_interval():
+        '''ожидание трех секунд'''
         saved = datetime.now()    
         while (datetime.now() - saved).seconds < 3:
             pass
         
-    def __task38(self):
+    def task38(self):
+        '''выводит информацию о последнем изме файла'''
         locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
         format = "%a, %d %b %Y %H:%M:%S" # строка для нужного форматирования
 
-        local_time = time.localtime(os.path.getmtime(self.onOpen()))
+        file_name = self.on_open()
+        if file_name != '':
+            local_time = time.localtime(os.path.getmtime(file_name))
+            
+            mbox.showinfo("информация о последнем изменении файла", 
+                        time.strftime(format, local_time))
         
-        mbox.showinfo("информация о последнем изменении файла", 
-                      time.strftime(format, local_time))
-
     @staticmethod
-    def onOpen():
+    def on_open():
+        '''открывает диалоговое окно для выбора файла на компьтере'''
         ftypes = [('Python файлы', '*.py'), ('Все файлы', '*')]
         dlg = fdlg.Open(filetypes = ftypes)
         return dlg.show()

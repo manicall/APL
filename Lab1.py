@@ -10,6 +10,7 @@ class Task16:
     def ball_volume(r):
         return 4 / 3 * math.pi * r ** 3
 
+    # результат программы
     @classmethod
     def print_answer(self):
         r = ui.get_num("Радиус: ")
@@ -22,7 +23,8 @@ class Task21:
     # вычисление площади треугольника
     def triangle_area(b, h):
         return  b * h / 2
-
+    
+    # результат программы
     @classmethod
     def print_answer(self):
         b = ui.get_num("Основание: ")

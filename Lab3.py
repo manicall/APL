@@ -9,6 +9,7 @@ class Task19:
         print(f"Ответ: {dec} Проверка: {int(str_bin, 2)}")
 
     def bin_to_dec(str_bin):
+        '''переводит двоичное число в десятичное'''
         sum = 0
         j = len(str_bin) - 1
 
@@ -27,6 +28,7 @@ class Task20:
         print(f"Ответ: {binary} Проверка: {bin(decimal)}")
         
     def dec_to_bin(q):
+        '''переводит десятичное число в двоичное'''
         result = ""
 
         while q > 0:

@@ -5,9 +5,9 @@ import sys, argparse, re
 from tkinter import messagebox as mbox
 from tkinter import filedialog as fdlg
 
-# возвращает объект, из которого можно извлечь название файла,
-# переданного в командной строке
 def get_namespace():
+    '''возвращает объект, из которого можно извлечь название файла,
+    переданного в командной строке'''
     if len(sys.argv) > 1:
         parser = argparse.ArgumentParser()
         parser.add_argument("-f1", "--file1", type=open)
@@ -16,7 +16,7 @@ def get_namespace():
         try:
             return parser.parse_args(sys.argv[1:])
         except:
-            print("файл не найден")
+           mbox.showerror("файл не найден")
 
 class App(tk.Tk):
     def __init__(self):
@@ -24,20 +24,20 @@ class App(tk.Tk):
         self.title("Лабораторная работа 10")
         self.geometry("800x600")   
         
-        self.__create_menu()
+        self.create_menu()
         
         self.listbox = tk.Listbox(width=50)
         self.listbox.pack(side=tk.LEFT, anchor=tk.NW)
                 
-    def __create_menu(self):
+    def create_menu(self):
         lables = [
             "проверка орфографии",
             "Повторяющиеся слова"
         ]
         
         commands = [
-            self.__task19,
-            self.__task20
+            self.task19,
+            self.task20
         ]
         
         menubar = tk.Menu(self)
@@ -46,19 +46,23 @@ class App(tk.Tk):
         for l, c in zip(lables, commands):
             menubar.add_cascade(label=l, command=c)
 
-    def __task19(self):
+    def task19(self):
+        '''проверяет заданный текст на орфографию'''
+        # извлечение текста из файла для проверки на орфографию
         namespace = get_namespace()
         if namespace != None and namespace.file1 != None:
             text1 = namespace.file1.read()
         else:
-            text1 = open(App.__onOpen()).read()
+            text1 = open(App.on_open()).read()
             
         text2 = open("словарь.txt").read()
-    
+
+        # преобразование текста из словаря в список
         splited = text2.split(" ")
+        # создание словаря ключами, которого являются слова из файла-словаря
         dictionary = dict(zip(splited, [0 for i in range(len(splited))]))
-    
-        text_list = App.__get_only_alnum_list(text1)
+        # получение списка, содержащего только слова или числа
+        text_list = App.get_only_alnum_list(text1)
         
         # выводит результат в listbox
         self.listbox.delete(0, tk.END)
@@ -68,14 +72,15 @@ class App(tk.Tk):
     
     # создает словарь из заданного текста
     @staticmethod
-    def __create_dictionary(text):
+    def create_dictionary(text):
         # устранение дубликатов в тексте
-        dictionary = " ".join(set(App.__get_only_alnum_list(text)))
+        dictionary = " ".join(set(App.get_only_alnum_list(text)))
         return dictionary
 
     # создает список слов в нижнем регистре из заданного текста
     @staticmethod
-    def __get_only_alnum_list(text):
+    def get_only_alnum_list(text):
+        '''возвращает список, содержащий только слова или числа'''
         # приведение символов к нижнему регистру
         l = ['']
 
@@ -91,24 +96,24 @@ class App(tk.Tk):
         
         return l
 
-    def __task20(self):
+    def task20(self):
+        '''проверяет заданный текст на двойные слова'''
+        # извлечение текста из файла для проверки на двойные слова
         namespace = get_namespace()
         if namespace != None and namespace.file2 != None:
             text = namespace.file2.read()
         else:
-            text = open(App.__onOpen()).read()
+            text = open(App.on_open()).read()
         
-        result = App.__find_double_words(text)
+        result = App.find_double_words(text)
         
         self.listbox.delete(0, tk.END)
         for i in range(len(result)):
              self.listbox.insert(tk.END, f"Слово: {result[i][0]} Строка: {result[i][1]}")
         
-        # добавляет двойные слова в текст и разбивает его на строки
-        # open(file.name, 'w').write(App.split_on_lines(App.double_words(text)))
-    
     @staticmethod
-    def __find_double_words(text):
+    def find_double_words(text):
+        '''поиск двойных слов в заданном тексте'''
         result = []     
         line_count = 0
 
@@ -123,7 +128,7 @@ class App(tk.Tk):
                 splited.append('\n')
                 splited.append('')
             elif text[i].isalnum():
-                splited[-1] += text[i]    
+                splited[-1] += text[i]
 
         for i in range(1, len(splited)):
             # если данное слово оказалось равным предыдущему (с проверкой, 
@@ -136,9 +141,10 @@ class App(tk.Tk):
             
         return result
             
-    # расставляет по тексту переносы строки в случайных местах
+
     @staticmethod
-    def __split_on_lines(text):
+    def split_on_lines(text):
+        '''расставляет по тексту переносы строки в случайных местах'''
         l = list(text)
         rnd = None
         count = 0
@@ -153,9 +159,9 @@ class App(tk.Tk):
         
         return "".join(l)
     
-    # создает двойные слова в случайных местах
     @staticmethod
-    def __double_words(text):
+    def double_words(text):
+        '''создает двойные слова в случайных местах'''
         l = re.split("\s", text)
         
         rnd = None
@@ -172,7 +178,8 @@ class App(tk.Tk):
         return " ".join(l)  
     
     @staticmethod
-    def __onOpen():
+    def on_open():
+        '''открывает диалоговое окно для выбора файла на компьтере'''
         ftypes = [('Текстовые файлы', '*.txt')]
         dlg = fdlg.Open(filetypes = ftypes)
         return dlg.show()

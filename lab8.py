@@ -7,7 +7,7 @@ class App(tk.Tk):
         self.title("Лабораторная работа 8 (задание 8)")
         self.geometry("800x600")   
         
-        self.__create_menu()
+        self.create_menu()
         
         tk.Label(text="Первая строка").grid()
         self.entry1 = tk.Entry()
@@ -17,7 +17,7 @@ class App(tk.Tk):
         self.entry2 = tk.Entry()
         self.entry2.grid(row=1, column=1)
          
-    def __create_menu(self):
+    def create_menu(self):
         main_menu = tk.Menu()
         
         lables = [
@@ -25,7 +25,7 @@ class App(tk.Tk):
         ]
         
         commands = [
-            self.__check_anagram
+            self.check_anagram
         ]
         
         for l, c in zip(lables, commands):
@@ -33,7 +33,8 @@ class App(tk.Tk):
 
         self.config(menu=main_menu)
 
-    def __check_anagram(self):
+    def check_anagram(self):
+        '''выводит результат проверки на анаграммы в диалоговое окно'''
         positive = "Данные строки являются аннограммами"
         negative = "Данные строки не являются аннограммами"
         
@@ -44,6 +45,7 @@ class App(tk.Tk):
 
     @staticmethod
     def is_anagram(str1, str2):
+        '''проверяет являются ли введенные строки анаграммами'''
         if len(str1) != len(str2): return False
         
         # преобразование строк словарь

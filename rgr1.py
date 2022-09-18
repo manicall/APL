@@ -4,10 +4,10 @@ import sys
 class App(QtWidgets.QApplication):
     def __init__(self):
         super().__init__(sys.argv)
-        self.window = Window(self)
+        self.window = Window()
         self.window.show()
 
-class Window(QtWidgets.QWidget):    
+class Window(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("букашка управляемая слайдерами")
@@ -18,13 +18,15 @@ class Window(QtWidgets.QWidget):
         
         self.vSlider.setInvertedAppearance(True)
         
+        # присоединение обработчиков
         self.vSlider.valueChanged.connect(self.on_vSliderValueChanged)
         self.hSlider.valueChanged.connect(self.on_hSliderValueChanged)
         
         self.field = Field()
         
-        self.hSlider.setRange(0, self.field.size().width() - 50)
-        self.vSlider.setRange(0, self.field.size().height() - 50)
+        # установка диапазона полузунков
+        self.hSlider.setRange(0, self.get_maximum_width())
+        self.vSlider.setRange(0, self.get_maximum_height())
 
         main_layout = QtWidgets.QHBoxLayout()  
         left_vBox = QtWidgets.QVBoxLayout()
@@ -39,30 +41,39 @@ class Window(QtWidgets.QWidget):
 
         self.setLayout(main_layout)
         
+    # обработчик изменения размеров окна 
     def resizeEvent(self, event):
         self.set_sliders_range()
         return super(Window, self).resizeEvent(event)
-    
+    # установка максимального значения для ползунков
     def set_sliders_range(self):
-        self.hSlider.setMaximum(self.field.size().width() - self.field.image_size.width())
-        self.vSlider.setMaximum(self.field.size().height() - self.field.image_size.height())
-        
+        self.hSlider.setMaximum(self.get_maximum_width())
+        self.vSlider.setMaximum(self.get_maximum_height())
+    # обработчик горизонтального ползунка
     def on_hSliderValueChanged(self):
         self.field.create_image(self.hSlider.value(), self.field.y)
-        
+    # обработчик вертикального ползунка
     def on_vSliderValueChanged(self):
         self.field.create_image(self.field.x, self.vSlider.value())
-        
+    # максимальная ширина
+    def get_maximum_width(self):
+        return self.field.size().width() - self.field.image_size.width()
+    # максимальная высота
+    def get_maximum_height(self):
+        return self.field.size().height() - self.field.image_size.height()
+             
 class Field(QtWidgets.QLabel):
     def __init__(self):
         super().__init__()
+        # координаты букашки
         self.x = 0
         self.y = 0
         
+        # направление букашки
         self.direction = "right"
-        
+        # размер букашки
         self.image_size = QtCore.QSize(50, 50)
-        
+        # изображение букашки
         self.pix = QtGui.QPixmap('ic_bug.png')
         self.pix = self.pix.scaled(self.image_size.width(), 
                                    self.image_size.height())  
@@ -77,12 +88,14 @@ class Field(QtWidgets.QLabel):
         self.update()
 
     def paintEvent(self, event):
+        '''отрисовка содержимого QLabel'''
         qp = QtGui.QPainter()
         qp.begin(self)
         self.draw_pixmap(qp, self.x, self.y)
         qp.end()
         
-    def draw_pixmap(self, qp, x, y):   
+    def draw_pixmap(self, qp, x, y):  
+        '''Отрисовка букашки''' 
         transform = QtGui.QTransform()
         transform.rotate(self.get_degree())
         
@@ -90,12 +103,14 @@ class Field(QtWidgets.QLabel):
         qp.drawPixmap(x, y, pt)
         
     def get_degree(self):
+        '''угол поворота букашки'''
         if (self.direction == "right"): return 0
         if (self.direction == "left"): return 180
         if (self.direction == "up"): return 90
         if (self.direction == "down"): return 270
         
     def set_direction(self, x, y):
+        '''установка направления букашки'''
         if (x > self.x): self.direction = "right"
         if (x < self.x): self.direction = "left"
         if (y > self.y): self.direction = "up"

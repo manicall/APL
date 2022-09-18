@@ -8,10 +8,11 @@ class App(tk.Tk):
         
         self.deck = []
         
-        self.__create_menu()
-        self.__create_listboxes()
-        self.__input_expression = tk.StringVar()
-        self.__output_expression = tk.StringVar()
+        self.create_menu()
+        self.create_listboxes()
+        # входное и выходное выражения
+        self.input_expression = tk.StringVar()
+        self.output_expression = tk.StringVar()
         
         lframe = tk.LabelFrame(self, text="задание 21")
         lframe.pack(padx=5, pady=5, anchor=tk.NW)
@@ -23,11 +24,11 @@ class App(tk.Tk):
         output_frame.pack(side=tk.LEFT)
 
         tk.Label(input_frame, text="Выражение").pack(side=tk.LEFT)
-        tk.Entry(input_frame, textvariable=self.__input_expression).pack(padx=5)
+        tk.Entry(input_frame, textvariable=self.input_expression).pack(padx=5)
         
-        tk.Label(output_frame, textvariable=self.__output_expression).pack(padx=5)
+        tk.Label(output_frame, textvariable=self.output_expression).pack(padx=5)
   
-    def __create_menu(self):
+    def create_menu(self):
         main_menu = tk.Menu()
         
         lables = [
@@ -37,9 +38,9 @@ class App(tk.Tk):
         ]
         
         commands = [
-            self.__create_deck,
-            self.__shuffle, 
-            self.__replace_uoperations
+            self.create_deck,
+            self.shuffle, 
+            self.replace_uoperations
         ]
         
         for l, c in zip(lables, commands):
@@ -47,15 +48,15 @@ class App(tk.Tk):
 
         self.config(menu=main_menu)
         
-    def __create_listboxes(self):     
+    def create_listboxes(self):     
         lframe = tk.LabelFrame(self, text="Задание 16")
         lframe.pack(fill=tk.Y, padx=5, pady=5, side=tk.LEFT)
         
-        self.__listbox_ordered = self.__create_listbox(lframe)  
-        self.__listbox_shuffled = self.__create_listbox(lframe)      
+        self.__listbox_ordered = self.create_listbox(lframe)  
+        self.__listbox_shuffled = self.create_listbox(lframe)      
         
     @staticmethod
-    def __create_listbox(master):        
+    def create_listbox(master):
         frame = tk.Frame(master)
         frame.pack(side=tk.LEFT, fill=tk.Y, padx=10)
         
@@ -68,7 +69,7 @@ class App(tk.Tk):
         
         return listbox
         
-    def __create_deck(self):
+    def create_deck(self):
         """Создает колоду и выводит результат в listbox"""
         nominal = [str(i) for i in range(2, 11)] + ['J', 'Q', 'K',  'A']
         # масть
@@ -76,9 +77,9 @@ class App(tk.Tk):
         # создание колоды
         self.deck = [i + j for j in suit for i in nominal]
         # вывод результата  
-        self.__clear_fill_listbox(self.__listbox_ordered, self.deck)
+        self.clear_fill_listbox(self.__listbox_ordered, self.deck)
 
-    def __shuffle(self):
+    def shuffle(self):
         """Выполняет перетасовку и выводит результат в listbox"""
         deck = self.deck
         # перетасовка 
@@ -86,58 +87,72 @@ class App(tk.Tk):
             j = rand.randint(0, len(deck[i]))
             deck[i], deck[j] = deck[j], deck[i]
         # вывод результата
-        self.__clear_fill_listbox(self.__listbox_shuffled, deck)
+        self.clear_fill_listbox(self.__listbox_shuffled, deck)
         
     @staticmethod
-    def __clear_fill_listbox(lbox, filler):
+    def clear_fill_listbox(lbox, filler):
         """Очищает и заполняет listbox"""
         lbox.delete(0, tk.END)  
         for card in filler: 
             lbox.insert(tk.END,card)
             
-    def __replace_uoperations(self):
-        tokens = self.__tocken_extractor(self.__input_expression.get())
-        
+    def replace_uoperations(self):
+        tokens = self.tocken_extractor(self.input_expression.get())
+        # знаки, которые могут стоять перед унарным знаком
         prev_tokens = ['+', '-', '*', '/', '^', '(']
+        # унарные операции
         u_operations = prev_tokens[0:2]
-
-        if self.__check_symbol(tokens[0], u_operations):
+        # проверка, на унарность первой лексемы в выражени
+        if self.check_symbol(tokens[0], u_operations):
             tokens[0] = 'u' + tokens[0]
         
+        # преобразование "+", "-" в "u+","u-"
         for i in range(1, len(tokens)):            
-            if self.__check_symbol(tokens[i], u_operations) \
-                and self.__check_symbol(tokens[i - 1], prev_tokens):
+            if self.check_symbol(tokens[i], u_operations) \
+                and self.check_symbol(tokens[i - 1], prev_tokens):
                     tokens[i] = 'u' + tokens[i]
 
-        self.__output_expression.set(" ".join(tokens))
+        self.output_expression.set(" ".join(tokens))
         
-    def __tocken_extractor(self, _str):
+    def tocken_extractor(self, _str):
+        '''разбивает выражение на лексемы'''
         simple_tokens = ['+', '-', '*', '/', '^', '(', ')']
         res_list = []
         j = None
-        
-        def append_number():
-            nonlocal j, res_list, _str
-            
-            if j != None:
-                    res_list.append(_str[j:i[0]])
-                    j = None
-        
+          
         for i in enumerate(_str):
-            if self.__check_symbol(i[1], simple_tokens):
+            # i[0] - индекс
+            # i[1] - символ в строке
+            
+            # если встретился оператор из simple_tokens
+            if self.check_symbol(i[1], simple_tokens): 
                 append_number()
                 res_list.append(i[1])
-            elif i[1].isdigit() or i[1] == '.':
+            # если очередной символ является числом или резделителем дроби
+            elif i[1].isdigit() or i[1] == '.': 
+                # запоминает позицию в строке,
+                # с которой начинается лексема, являющаяся числом
                 if j == None: j = i[0]
-            else:
+            # если встретился неизвестный символ
+            else: 
                 append_number()
         
         append_number() 
             
+        def append_number():
+            '''если лексема оказалась числом, 
+            то добавляет это число из строки с позиции j до позиции i[0] в список'''
+            nonlocal j, res_list, _str
+            
+            if j != None:
+                res_list.append(_str[j:i[0]])
+                j = None
+            
         return res_list    
 
     @staticmethod
-    def __check_symbol(_char, _list):
+    def check_symbol(_char, _list):
+        '''проверяет содержится ли символ в списке'''
         return any(list(map(lambda x: _char == x, _list)))
 
 if __name__ == "__main__":

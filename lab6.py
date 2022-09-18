@@ -33,17 +33,18 @@ class App(tk.Tk):
         tk.Radiobutton(self.group_2, text="рейтинг: 0.4", variable=self.check_rate, value=0.4, command=self.change_entry_state).grid(sticky=tk.W)
         tk.Radiobutton(self.group_2, text="рейтинг: 0.6 и выше", variable=self.check_rate, value=0.6, command=self.change_entry_state).grid(sticky=tk.W)
         
+        # поле для ввода рейтинга, если он больше 0.6
         self.rate_entry = tk.Entry(self.group_2, textvariable=self.rate, state=tk.DISABLED)
         self.rate_entry.grid(sticky=tk.W)
         
-         # надпись для вывода результата
+        # надпись для вывода результата
         tk.Label(self.group_2, textvariable=self.result_value, justify='left').grid(sticky=tk.W)
         
         tk.Button(self.group_2, text="Рассчитать", command=self.on_calc_task21).grid(pady=10, sticky=tk.E)     
          
     def on_calc_task20(self):
         num_mark = None
-        
+         # проверка, что числовая оценка задана правильно
         def valid():
             nonlocal num_mark
             try:
@@ -54,6 +55,7 @@ class App(tk.Tk):
             
             return True
         
+        # вывод результата
         if not valid(): 
             self.char_mark.set("Ожидалось число больше нуля")
         else:
@@ -66,11 +68,12 @@ class App(tk.Tk):
             self.rate_entry['state'] = tk.DISABLED
     
     def on_calc_task21(self):
+        '''расчитывает значение из таблицы 
+        и прибавку к зарплате по заданному рейтингу'''
         rate = None
-        
+        # проверка, что рейтинг задан правильно
         def valid():
             nonlocal rate
-            
             try:
                 rate = float(self.rate.get())
                 if (rate < 0.6): return False
@@ -79,6 +82,7 @@ class App(tk.Tk):
             
             return True
 
+        # вывод результата
         if self.check_rate.get() == 0.6:  
             if not valid(): 
                 self.result_value.set("Ожидалось число не менее 0.6")
