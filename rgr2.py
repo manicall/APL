@@ -21,10 +21,7 @@ class Solver:
         
         solution = linprog(c, A_ub, b_ub, A_eq, b_eq)
        
-        print(solution)
-       
-        mbox = QtWidgets.QMessageBox()
-        
+        mbox = QtWidgets.QMessageBox()  
         text = ""
         try:
             for i in enumerate(solution['x']):
@@ -67,6 +64,7 @@ class TableView(QtWidgets.QTableView):
         self.model = Model()
         self.setModel(self.model)
         
+        # установка границ для заголовков
         self.horizontalHeader().setStyleSheet(self.get_header_style())       
         self.verticalHeader().setStyleSheet(self.get_header_style())
     
@@ -77,8 +75,7 @@ class TableView(QtWidgets.QTableView):
             border-bottom: 1px solid gray;
             border-right: 1px solid gray;
             background-color: white;
-        }
-    '''
+        } '''
     
     def get_model(self): return self.model
     
@@ -119,11 +116,13 @@ class Model(QtGui.QStandardItemModel):
                 
     def fill_ub(self):
         for i in enumerate(self.b_ub):
-            self.setItem(i[0], self.columnCount() - 1, QtGui.QStandardItem(str(i[1])))
+            item = QtGui.QStandardItem(str(i[1]))
+            self.setItem(i[0], self.columnCount() - 1, item)
                     
     def fill_eq(self):
         for i in enumerate(self.b_eq):
-            self.setItem(self.rowCount() - 1, i[0], QtGui.QStandardItem(str(i[1])))
+            item = QtGui.QStandardItem(str(i[1]))
+            self.setItem(self.rowCount() - 1, i[0], item)
             
     def get_c(self):
         c = []

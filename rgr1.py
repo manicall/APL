@@ -10,9 +10,11 @@ class App(QtWidgets.QApplication):
 class Window(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("букашка управляемая слайдерами")
-        self.resize(300, 200)
-
+        self.setWindowTitle("букашка и ползунки")
+        self.resize(450, 300)
+    
+        self.setWindowIcon(self.get_icon())
+         
         self.vSlider = QtWidgets.QSlider()
         self.hSlider = QtWidgets.QSlider(QtCore.Qt.Orientation.Horizontal)
         
@@ -40,7 +42,12 @@ class Window(QtWidgets.QWidget):
         main_layout.addLayout(right_vBox)
 
         self.setLayout(main_layout)
-        
+    
+    def get_icon(self):
+        t = QtGui.QTransform()
+        t.rotate(-90)
+        return QtGui.QIcon(QtGui.QPixmap('ic_bug.png').transformed(t))
+               
     # обработчик изменения размеров окна 
     def resizeEvent(self, event):
         self.set_sliders_range()

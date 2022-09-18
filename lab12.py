@@ -66,9 +66,9 @@ class Widget(QtWidgets.QTabWidget):
         def get_label_text():
             nonlocal A
             if j != len(A[i]) - 1:
-                return "x" + str(j + 1) + " + "
+                return "x" + str(j + 1) + " +"
             else:
-                return "x" + str(j + 1) + " = "
+                return "x" + str(j + 1) + " ="
             
         grid = QtWidgets.QGridLayout()
    
