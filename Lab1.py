@@ -3,7 +3,7 @@ from user_input import UserInput as ui
 
 class Task16:
     # вычисление площади круга
-    def round_area(r):
+    def round_area(self, r):
         return math.pi * r ** 2
 
     # вычисление объема шара

@@ -1,4 +1,3 @@
-from wsgiref import handlers
 from random_password import RandomPassword as rp
 from user_input import UserInput as ui
 from string import ascii_uppercase
@@ -68,7 +67,7 @@ class Task20:
     
 if __name__ == "__main__": 
     print("Задание 19")
-    Task19.print_answer()
+    #Task19.print_answer()
     print()
     print("Задание 20")
     Task20.print_answer()

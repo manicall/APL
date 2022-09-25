@@ -1,5 +1,4 @@
 import re
-
 class UserInput:
     @staticmethod
     def get_int(title = "Введите целое число: "):

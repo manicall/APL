@@ -13,6 +13,7 @@ class Task19:
         sum = 0
         j = len(str_bin) - 1
 
+        # sum = n^2*a[n] + (n-1)^2*a[n-1] + ... + 0^2*a[0]
         for i in str_bin:
             sum += 2 ** j * int(i)
             j -= 1

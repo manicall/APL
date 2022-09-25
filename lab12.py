@@ -53,7 +53,7 @@ class Window(QtWidgets.QMainWindow):
             b.append(float(row[-1].text()))
             
         return b
-        
+
 class Widget(QtWidgets.QTabWidget): 
     def __init__(self):
         super().__init__()    
