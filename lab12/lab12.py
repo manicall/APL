@@ -8,7 +8,7 @@ class App(QtWidgets.QApplication):
         self.window = Window()
         self.window.show()
 
-class Window(QtWidgets.QMainWindow):    
+class Window(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Решение СЛУ")
